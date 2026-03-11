@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SecurePay | Intelligent Protection</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            background-color: #0b0f13;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+        }
+
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a2a3a 0%, #0b0f13 100%);
+        }
+
+        .fraud-badge {
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid #00d2ff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #00d2ff;
+            margin-bottom: 25px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #00d2ff, #9d50bb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #999;
+            font-size: 18px;
+            margin-bottom: 35px;
+        }
+
+        /* Container for buttons to sit side-by-side */
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .browse-btn {
+            background: #00d2ff;
+            color: #0b0f13;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .browse-btn:hover {
+            transform: scale(1.05);
+            background: #00b4db;
+        }
+
+        /* New Style for Create Account Button */
+        .account-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid #333;
+            padding: 15px 35px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .account-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="fraud-badge">🛡️ AI-Powered Fraud Detection</div>
+            <h1>Shop Securely with <br> <span class="gradient-text">Intelligent Protection</span></h1>
+            <p>Premium electronics marketplace with real-time AI fraud detection. <br> Every transaction is screened,
+                scored, and secured.</p>
+
+            <div class="btn-group">
+                <a href="/shop" class="browse-btn">Browse Products ➔</a>
+
+                <a href="/signup" class="account-btn">Create Account</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

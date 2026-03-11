@@ -1,0 +1,200 @@
+/* PAGE BACKGROUND */
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #020617, #020617 40%, #020617);
+    color: #e5e7eb;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+    height: 60px;
+    background: #020617;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.menu-btn {
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.logo {
+    color: #38bdf8;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: #020617;
+    padding: 20px;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar a,
+.sidebar button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: none;
+    color: white;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.sidebar a:hover,
+.sidebar button:hover {
+    background: #1e293b;
+}
+
+.close-btn {
+    font-size: 26px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* OVERLAY */
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 900;
+}
+
+
+/* CENTER RESULT CARD */
+.card-box {
+    width: 420px;
+    margin: 140px auto;
+    background: linear-gradient(145deg, #020617, #020617);
+    padding: 28px;
+    border-radius: 14px;
+    text-align: center;
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    box-shadow:
+        0 0 30px rgba(56, 189, 248, 0.15),
+        inset 0 0 10px rgba(56, 189, 248, 0.05);
+
+    animation: fadeUp 0.6s ease;
+}
+
+/* TITLE */
+.card-box h2 {
+    font-size: 25px;
+    margin-bottom: 14px;
+    color: #38bdf8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+/* SUCCESS ICON */
+.card-box h2::before {
+    /* content: "✔"; */
+    background: #22c55e;
+    color: white;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+/* DETAILS */
+.card-box p {
+    font-size: 20px;
+    margin: 6px 0;
+    color: #cbd5f5;
+}
+
+.card-box b {
+    color: #94a3b8;
+}
+
+/* FRAUD SECTION */
+.card-box h3 {
+    margin-top: 18px;
+    font-size: 16px;
+    color: #ef4444;
+}
+
+/* FRAUD LIST */
+.card-box ul {
+    margin-top: 10px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.card-box ul li {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fecaca;
+    padding: 6px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* LIGHT THEME SUPPORT */
+.light-theme {
+    background: #f8fafc;
+    color: #020617;
+}
+
+.light-theme .card-box {
+    background: #ffffff;
+    color: #020617;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .card-box h2 {
+    color: #2563eb;
+}
+
+.light-theme .card-box p {
+    color: #334155;
+}
+
+
+.light-theme .navbar,
+.light-theme .sidebar {
+    background: #ffffff;
+    border-color: #e5e7eb;
+}
+
+.light-theme .sidebar a,
+.light-theme .sidebar button {
+    color: #020617;
+}

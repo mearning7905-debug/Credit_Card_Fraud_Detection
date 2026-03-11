@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SecurePay | Create Account</title>
+    <style>
+        body {
+            background-color: #0b0f13;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            /* Allows Navbar at top and Content centered */
+            height: 100vh;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: #0b1218;
+            border-bottom: 1px solid #222;
+            width: 100%;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d2ff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-links a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* --- SIGNUP CARD SECTION --- */
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px;
+            /* Space for fixed navbar */
+        }
+
+        .signup-card {
+            background-color: #161b22;
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid #30363d;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #00d2ff, #9d50bb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0b0f13;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .reg-btn {
+            width: 100%;
+            padding: 14px;
+            background: #00d2ff;
+            border: none;
+            border-radius: 8px;
+            color: #0b0f13;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .reg-btn:hover {
+            background: #00b4db;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo">🛡️ SecurePay</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/shop">Products</a>
+            <a href="/history">Transactions</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="signup-card">
+            <h2>Create <span class="gradient-text">Account</span></h2>
+            <p style="color: #888;">Join SecurePay for protected shopping</p>
+
+            <form action="/register" method="POST">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="username" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" name="mobile" placeholder="+91 9876543210" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="reg-btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

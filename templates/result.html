@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Transaction Result</title>
+    <link rel="stylesheet" href="static/result.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="left">
+            <span class="menu-btn" onclick="openMenu()">☰</span>
+            <span class="logo">💳 SmartPay</span>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="sidebar">
+        <span class="close-btn" onclick="closeMenu()">❌</span>
+        <button onclick="toggleTheme()">🌓 Toggle Theme</button>
+        <button onClick="location.href='/'">📺 Product</button>
+        <button onClick="location.href='/history'">📜 History</button>
+        <button onClick="location.href='/analytics'">📊 Analytics</button>
+        <button onClick="location.href='/help'">❓ Get Help</button>
+        <button onClick="location.href='/feedback'">📝 Feedback</button>
+    </div>
+
+    <!-- OVERLAY -->
+    <div id="overlay" onclick="closeMenu()"></div>
+
+
+    <div class="card-box">
+
+        <h2>{{ session['result'] }}</h2>
+
+        <p><b>Card:</b> **** {{ session['card_number'][-4:] }}</p>
+
+        <p><b>Bank:</b> {{ session['bank_name'] }}</p>
+
+        <p><b>Payment Method:</b> {{ session['payment_method'] }}</p>
+
+        <p><b>Amount:</b> ₹{{ session['amount'] }}</p>
+
+        <p><b>Time:</b> {{ session['tx_time'] }}</p>
+        <p><b>Transaction ID:</b> {{ session['txn_id'] }}</p>
+
+        {% if session['fraud_reasons'] %}
+        <h3>Fraud Reasons</h3>
+        <ul>
+            {% for reason in session['fraud_reasons'] %}
+            <li>{{ reason }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+    </div>
+
+    <script>
+
+        if (localStorage.getItem("theme") === "light") {
+            document.body.classList.add("light-theme");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("light-theme");
+            localStorage.setItem(
+                "theme",
+                document.body.classList.contains("light-theme") ? "light" : "dark"
+            );
+        }
+
+        function openMenu() {
+            document.getElementById("sidebar").classList.add("active");
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeMenu() {
+            document.getElementById("sidebar").classList.remove("active");
+            document.getElementById("overlay").style.display = "none";
+        }
+
+    </script>
+
+</body>
+
+</html>

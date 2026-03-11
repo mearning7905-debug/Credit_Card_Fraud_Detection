@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Get Help | SmartPay</title>
+    <!-- <link rel="stylesheet" href="help.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='help.css') }}">
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="left">
+            <span class="menu-btn" onclick="openMenu()">☰</span>
+            <span class="logo">💳 SmartPay</span>
+        </div>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <span class="close-btn" onclick="closeMenu()">❌</span>
+        <button onclick="toggleTheme()">🌓 Toggle Theme</button>
+        <button onClick="location.href='/'">📺 Product</button>
+        <button onClick="location.href='/history'">📜 History</button>
+        <button onClick="location.href='/help'">❓ Get Help</button>
+        <button onClick="location.href='/feedback'">📝 Feedback</button>
+    </div>
+
+    <!-- Help Container -->
+    <div class="help-container">
+        <h2>Need Help?</h2>
+        <p>We are here to assist you with any issues</p>
+
+        <!-- Help Options -->
+        <div class="help-options">
+            <div class="help-card">
+                <h3>🔒 Card Fraud Issue</h3>
+                <p>Report suspicious or unauthorized transactions immediately.</p>
+            </div>
+
+            <div class="help-card">
+                <h3>💳 Payment Failed</h3>
+                <p>Get help if your transaction did not go through.</p>
+            </div>
+
+            <div class="help-card">
+                <h3>📲 OTP / Verification</h3>
+                <p>Having trouble receiving OTP or verification?</p>
+            </div>
+
+            <div class="help-card">
+                <h3>👤 Account Support</h3>
+                <p>Update details or recover your account.</p>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <form class="help-form">
+            <h3>Contact Support</h3>
+
+            <label>Name</label>
+            <input type="text" placeholder="Enter your name" required>
+
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email" required>
+
+            <label>Issue Type</label>
+            <select required>
+                <option value="">Select Issue</option>
+                <option>Card Fraud</option>
+                <option>Payment Failed</option>
+                <option>OTP Issue</option>
+                <option>Account Problem</option>
+                <option>Other</option>
+            </select>
+
+            <label>Description</label>
+            <textarea rows="4" placeholder="Describe your issue..." required></textarea>
+
+            <button type="submit">Submit Request</button>
+        </form>
+
+        <p id="successMsg"></p>
+    </div>
+
+    <script>
+        document.querySelector(".help-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            document.getElementById("successMsg").innerText =
+                "✅ Your request has been submitted. Our support team will contact you soon.";
+        });
+
+        // THEME
+        if (localStorage.getItem("theme") === "light") {
+            document.body.classList.add("light-theme");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("light-theme");
+            localStorage.setItem(
+                "theme",
+                document.body.classList.contains("light-theme") ? "light" : "dark"
+            );
+        }
+
+        function openMenu() {
+            sidebar.classList.add("active");
+            overlay.style.display = "block";
+        }
+
+        function closeMenu() {
+            sidebar.classList.remove("active");
+            overlay.style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback | SmartPay</title>
+    <!-- <link rel="stylesheet" href="feedback.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='feedback.css') }}">
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="left">
+            <span class="menu-btn" onclick="openMenu()">☰</span>
+            <span class="logo">💳 SmartPay</span>
+        </div>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <span class="close-btn" onclick="closeMenu()">❌</span>
+        <button onclick="toggleTheme()">🌓 Toggle Theme</button>
+        <button onClick="location.href='/'">📺 Product</button>
+        <button onClick="location.href='/history'">📜 History</button>
+        <button onClick="location.href='/help'">❓ Get Help</button>
+        <button onClick="location.href='/feedback'">📝 Feedback</button>
+    </div>
+
+    <!-- Feedback Container -->
+    <div class="feedback-container">
+        <h2>We Value Your Feedback</h2>
+        <p>Help us improve by sharing your experience</p>
+
+        <form id="feedbackForm">
+            <label>Name</label>
+            <input type="text" placeholder="Enter your name" required>
+
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email" required>
+
+            <label>Rating</label>
+            <select required>
+                <option value="">Select Rating</option>
+                <option>⭐⭐⭐⭐⭐ Excellent</option>
+                <option>⭐⭐⭐⭐ Good</option>
+                <option>⭐⭐⭐ Average</option>
+                <option>⭐⭐ Poor</option>
+                <option>⭐ Very Poor</option>
+            </select>
+
+            <label>Your Feedback</label>
+            <textarea rows="5" placeholder="Write your feedback..." required></textarea>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+
+        <p id="successMsg"></p>
+    </div>
+
+    <script>
+        document.getElementById("feedbackForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            document.getElementById("successMsg").innerText = "✅ Thank you for your feedback!";
+        });
+
+        // THEME
+        if (localStorage.getItem("theme") === "light") {
+            document.body.classList.add("light-theme");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("light-theme");
+            localStorage.setItem(
+                "theme",
+                document.body.classList.contains("light-theme") ? "light" : "dark"
+            );
+        }
+
+        function openMenu() {
+            sidebar.classList.add("active");
+            overlay.style.display = "block";
+        }
+
+        function closeMenu() {
+            sidebar.classList.remove("active");
+            overlay.style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>
