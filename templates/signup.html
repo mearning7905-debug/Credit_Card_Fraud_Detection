@@ -145,8 +145,18 @@
         <div class="signup-card">
             <h2>Create <span class="gradient-text">Account</span></h2>
             <p style="color: #888;">Join SecurePay for protected shopping</p>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div
+                style="background-color: #ff4d4d; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px; text-align: center;">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
 
-            <form action="/register" method="POST">
+            <form action="{{ url_for('register') }}" method="POST">
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" name="username" placeholder="John Doe" required>
@@ -164,10 +174,24 @@
                     <input type="password" name="password" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="reg-btn">Sign Up</button>
+                <p style="text-align: center; margin-top: 15px; color: #8b949e;">
+                    Already have an account?
+                    <a href="{{ url_for('login_page') }}" style="color: #58a6ff; text-decoration: none;">Login here</a>
+                </p>
             </form>
         </div>
     </div>
+    <script>
 
+        setTimeout(function () {
+            let flashMessage = document.querySelector('[style*="background-color: #ff4d4d"]');
+            if (flashMessage) {
+                flashMessage.style.transition = "opacity 0.5s ease";
+                flashMessage.style.opacity = "0";
+                setTimeout(() => flashMessage.remove(), 500);
+            }
+        }, 4000);
+    </script>
 </body>
 
 </html>

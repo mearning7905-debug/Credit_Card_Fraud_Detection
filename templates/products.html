@@ -171,47 +171,6 @@
             cursor: pointer;
         }
     </style>
-
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-    <script>
-        async function startPayment(amount) {
-
-            let response = await fetch("/create-order", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: amount })
-            })
-
-            let order = await response.json()
-
-            var options = {
-                key: "rzp_test_SPoIpuOUhqlt8e",
-                amount: order.amount,
-                currency: "INR",
-                name: "SmartPay Store",
-                description: "Product Purchase",
-                order_id: order.id,
-
-                handler: async function (response) {
-
-                    await fetch("/verify-payment", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(response)
-                    })
-
-                    alert("✅ Payment Successful")
-
-                    location.href = "/history"
-                }
-            }
-
-            var rzp = new Razorpay(options)
-            rzp.open()
-
-        }
-    </script>
 </head>
 
 <body>
@@ -248,7 +207,7 @@
                 <h3>{{ p.name }}</h3>
                 <div class="price">₹{{ p.price }}</div>
                 <div class="btn-group">
-                    <button class="pay-btn" onclick="startPayment({{ p.price }})">Pay Now</button>
+                    <button class="pay-btn" onclick="location.href='/pay/{{ p.id }}'">Pay Now</button>
                     <button class="detail-btn" onclick="location.href='/product/{{ p.id }}'">View Details</button>
                 </div>
             </div>
