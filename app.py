@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, session, redirect, url_for
+from flask import Flask, jsonify, render_template, request, session, redirect, url_for,flash
 import random
 import sqlite3
 from datetime import datetime, timedelta
@@ -61,27 +61,6 @@ def verify_payment():
 
     except:
         return jsonify({"status": "failed"})    
-
-# @app.route("/payment_success", methods=["POST"])
-# def payment_success():
-
-#     data = request.json
-
-#     payment_id = data["razorpay_payment_id"]
-#     order_id = data["razorpay_order_id"]
-
-#     conn = get_db()
-
-#     conn.execute(
-#         "INSERT INTO transactions (card_last4, bank_name, payment_method, amount, status, time) VALUES (?,?,?,?,?,?)",
-#         ("1234","Razorpay","Online",500,"Success",datetime.now())
-#     )
-
-#     conn.commit()
-#     conn.close()
-
-#     return jsonify({"status":"ok"})
-
 
 # ---------------- DATABASE ----------------
 def get_db():
@@ -214,6 +193,8 @@ products = [
         "price": 25000,
         "image": "images/washingmachine2.jpg",
     },
+        
+    
     {
         "id": 51,
         "name": "Washing Machine",
@@ -250,12 +231,7 @@ products = [
         "price": 25000,
         "image": "images/washingmachine8.jpg",
     },
-    {
-        "id": 57,
-        "name": "Washing Machine",
-        "price": 25000,
-        "image": "images/washingmachine9.jpg",
-    },
+    
     {
         "id": 58,
         "name": "Washing Machine",
@@ -320,21 +296,52 @@ def register():
     mobile = request.form.get("mobile")
     password = request.form.get("password")
 
-    # This is a basic example; in a real app, you would hash the password.
     try:
         conn = get_db()
+        
         conn.execute("INSERT INTO users (username, email, mobile, password) VALUES (?, ?, ?, ?)",
                      (username, email, mobile, password))
         conn.commit()
         conn.close()
         
         session["user"] = username
-        # After successful signup, redirect to the shop page
+        flash("Registration Successful!", "success") 
         return redirect(url_for('home'))
+
     except sqlite3.IntegrityError:
-        return "❌ Username or Email already exists!"
-    except:
-        return "❌ An error occurred during registration."
+        
+        flash("❌ Email or Username already exists! Please Login.", "error") 
+        return redirect(url_for('signup_page')) 
+
+
+@app.route("/login")
+def login_page():
+    return render_template("login.html")
+
+@app.route("/signin", methods=["POST"])
+def signin():
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    conn = get_db()
+    
+    user = conn.execute("SELECT * FROM users WHERE email=? AND password=?", (email, password)).fetchone()
+    conn.close()
+
+    if user:
+        
+        session["user"] = user["username"]
+        
+        
+        if session.get("pending_checkout"):
+            return redirect(url_for('card'))
+        
+        
+        return redirect(url_for('card'))
+    else:
+        
+        flash("❌ Invalid Email or Password!", "error")
+        return redirect(url_for('login_page'))
     
 
 @app.route("/chatbot", methods=["POST"])
@@ -361,9 +368,6 @@ def chatbot():
 
     return jsonify({"reply": reply})
 
-
-
-
 @app.route("/")
 def index():
     return render_template("main.html")
@@ -371,7 +375,9 @@ def index():
 
 @app.route("/shop")
 def home():
-    return render_template("homepage.html", products=products)
+    return render_template("products.html", products=products)
+
+@app.route("/chatbot", methods=["POST"])
 
 # ================= SEARCH API =================
 @app.route("/search/<product>")
@@ -413,151 +419,21 @@ def pay(product_id):
     if not product:
         return "Product not found", 404
 
+    
     session["item"] = product["name"]
     session["amount"] = product["price"]
     session["item_image"] = product["image"]
+    session["pending_checkout"] = True 
+
+    if "user" not in session:
+        return redirect(url_for("signup_page"))
 
     return redirect(url_for("card"))
-
-
-# ================= CARD PAGE =================
-@app.route("/card", methods=["GET", "POST"])
-def card():
-    if request.method == "POST":
-        card_number = request.form.get("card_number", "").strip()
-        bank_name = request.form.get("bank_name")
-        payment_method = request.form.get("payment_method")
-        amount = float(session.get("amount", 0))
-        cvv = request.form.get("cvv", "")
-       
-
-       
-        expiry = request.form.get("expiry", "")
-
-        if (
-            amount <= 0
-            or not cvv.isdigit()
-            or len(cvv) != 3
-            or not card_number.isdigit()
-        ):
-            session["result"] = "❌ Invalid Transaction"
-            session["fraud_reasons"] = ["Invalid card details"]
-            return render_template("result.html")
-
-        session.update({
-    "card_number": card_number,
-    "amount": amount,
-    "expiry": expiry,
-    "bank_name": bank_name,
-    "payment_method": payment_method,
-    "tx_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    "txn_id": "TXN" + str(random.randint(100000,999999)),
-})
-
-        # Device detection
-        ua = request.headers.get("User-Agent", "")
-        if "Mobile" in ua:
-            session["device_type"] = "Mobile"
-        elif "Windows" in ua or "Mac" in ua:
-            session["device_type"] = "Desktop"
-        else:
-            session["device_type"] = "Unknown"
-
-        # Generate OTP
-        session["otp"] = str(random.randint(1000, 9999))
-        session["otp_time"] = datetime.now().timestamp()
-        session["otp_attempts"] = 0   # start from 0
-
-        print("OTP:", session["otp"])
-        return render_template("otp.html", otp=session["otp"])
-
-    return render_template(
-        "index.html",
-        item=session.get("item"),
-        amount=session.get("amount"),
-        item_image=session.get("item_image")
-    )
-
-
-# ================= VERIFY OTP =================
-@app.route("/verify", methods=["POST"])
-def verify():
-    entered = request.form.get("otp", "")
-    stored = session.get("otp")
-
-    if not stored:
-        return redirect(url_for("card"))
-
-    # OTP expiry (30 sec)
-    if datetime.now().timestamp() - session.get("otp_time", 0) > 30:
-        return render_template("otp.html", otp=stored, error="❌ OTP Expired")
-
-    # Wrong OTP
-    if entered != stored:
-        session["otp_attempts"] += 1
-
-        if session["otp_attempts"] >= 3:
-            save_transaction("❌ Card Blocked", ["3 wrong OTP attempts"])
-            return render_template("result.html")
-
-        return render_template(
-            "otp.html",
-            otp=stored,
-            error=f"❌ Wrong OTP ({session['otp_attempts']}/3)"
-        )
-
-    # Success
-    fraud = []
-    if session.get("device_type") == "Unknown":
-        fraud.append("Suspicious device")
-
-    if fraud:
-        save_transaction("⚠️ Fraud Detected", fraud)
-    else:
-        save_transaction("✅ Transaction Successful", [])
-
-    return render_template("result.html")
-
-# ================= RESEND OTP =================
-@app.route("/resend_otp")
-def resend_otp():
-    session["otp"] = str(random.randint(1000, 9999))
-    session["otp_time"] = datetime.now().timestamp()
-    # attempts NOT reset
-
-    print("Resent OTP:", session["otp"])
-
-    return render_template(
-        "otp.html",
-        otp=session["otp"],
-        resent=True
-    )
-
-# ================= SAVE TRANSACTION =================
-def save_transaction(status, reasons):
-    conn = get_db()
-    conn.execute("""
-        INSERT INTO transactions (card_last4, amount, status, time)
-        VALUES (?, ?, ?, ?)
-    """, (
-        session["card_number"][-4:],
-        session["amount"],
-        status,
-        session["tx_time"]
-    ))
-    conn.commit()
-    conn.close()
-
-    session["result"] = status
-    session["fraud_reasons"] = reasons
 
 @app.route("/history")
 def history():
     conn = get_db()
-    # બધા ટ્રાન્ઝેક્શન લો
     rows = conn.execute("SELECT * FROM transactions ORDER BY id DESC").fetchall()
-    
-    # સ્ટેટ્સ ગણતરી
     total = len(rows)
     success = len([r for r in rows if "Successful" in r['status']])
     failed = total - success
@@ -614,9 +490,6 @@ def download_statement():
         download_name="SmartPay_Statement.pdf",
         mimetype="application/pdf"
     )
-
-
-
 # ================= FEEDBACK =================
 @app.route("/feedback")
 def feedback():

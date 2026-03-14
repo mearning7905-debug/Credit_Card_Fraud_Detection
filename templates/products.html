@@ -98,79 +98,136 @@
             margin-bottom: 30px;
         }
 
-        /* Product Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
+        /* PRODUCT CARD */
         .card {
-            background: #161b22;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #222;
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: #3b71f3;
-        }
-
-        .card img {
-            width: 100%;
-            height: 150px;
-            object-fit: contain;
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 16px;
-            margin: 10px 0;
-            color: #fff;
-        }
-
-        .price {
-            color: #00d2ff;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .btn-group {
+            background: linear-gradient(145deg, #0b1628, #081224);
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid #0e223f;
+            transition: all .35s ease;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            text-align: center;
         }
 
+        /* Hover */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .6);
+        }
+
+        /* IMAGE AREA */
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #1b2a45;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        /* PRODUCT NAME */
+        .card h3 {
+            font-size: 18px;
+            margin: 8px 0;
+            font-weight: 600;
+        }
+
+        /* PRICE */
+        .price {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* BUTTON AREA */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* PAY BUTTON */
         .pay-btn {
-            background: #3b71f3;
-            color: white;
+            flex: 1;
+            background: #1e2d44;
             border: none;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .detail-btn {
-            background: #21262d;
             color: white;
-            border: 1px solid #333;
             padding: 10px;
-            border-radius: 6px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
+            transition: .3s;
         }
 
-        .cart-icon {
-            font-size: 24px;
+        .pay-btn:hover {
+            background: #2a3d5c;
+        }
+
+        /* VIEW DETAILS BUTTON */
+        .detail-btn {
+            flex: 1.5;
+            background: #16c0dd;
+            border: none;
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
+            transition: .3s;
+        }
+
+        .detail-btn:hover {
+            background: #00d2ff;
         }
     </style>
+
+    <!-- Rezorpay -->
+    <script>
+        async function payNow(amount) {
+            let response = await fetch("/create-order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: amount
+                })
+            })
+
+            let order = await response.json()
+
+            var options = {
+                key: "rzp_test_SPoIpuOUhqlt8e",
+                amount: order.amount,
+                currency: "INR",
+                name: "SmartPay Store",
+                description: "Product Purchase",
+                order_id: order.id,
+                handler: async function (response) {
+                    await fetch("/verify-payment", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(response)
+                    })
+
+                    alert("✅ Payment Successful")
+                    window.location.href = "/history"
+                }
+            }
+            var rzp = new Razorpay(options)
+            rzp.open()
+        }
+
+    </script>
+
 </head>
 
 <body>
